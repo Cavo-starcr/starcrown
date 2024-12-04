@@ -1,10 +1,11 @@
 // ==UserScript==
 // @name         Enhanced GPT Translator with Animations and Dynamic Header
 // @namespace    http://tampermonkey.net/
-// @version      1.5
-// @description  GPT-based translator with enhanced UI, animations, and dynamic language display in the header.
-// @author       You
+// @version      17.5
+// @description  Translator
+// @author       Cavo
 // @match        https://my.livechatinc.com/*
+// @require      https://raw.githubusercontent.com/Cavo-starcr/starcrown/refs/heads/main/translator.user.js
 // @grant        GM.xmlHttpRequest
 // @grant        GM_addStyle
 // @grant        GM.getValue
