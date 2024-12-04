@@ -5,6 +5,7 @@
 // @description  A GPT-based translator with draggable/resizable UI, hotkeys, and language switching.
 // @author       Cavo
 // @match        https://my.livechatinc.com/*
+// @require      https://raw.githubusercontent.com/Cavo-starcr/starcrown/refs/heads/main/translator.user.js
 // @grant        GM.xmlHttpRequest
 // @grant        GM_addStyle
 // @grant        GM.getValue
