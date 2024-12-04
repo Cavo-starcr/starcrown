@@ -5,7 +5,6 @@
 // @description  Translator
 // @author       Cavo
 // @match        https://my.livechatinc.com/*
-// @require      https://raw.githubusercontent.com/Cavo-starcr/starcrown/refs/heads/main/translator.user.js
 // @grant        GM.xmlHttpRequest
 // @grant        GM_addStyle
 // @grant        GM.getValue
