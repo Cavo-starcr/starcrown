@@ -1,279 +1,239 @@
 // ==UserScript==
-// @name         CC Translator
-// @namespace    http://tampermonkey.net/
-// @version      17.2
-// @description  GPT Translator
-// @author       Cavo
-// @match        https://my.livechatinc.com/*
-// @grant        GM.xmlHttpRequest
+// @name         GPT Translator with Advanced Error Handling and Enhanced UI
+// @namespace    https://your-namespace.example/
+// @version      1.3
+// @description  Перевод текста с GPT API, улучшенное UI и обработка ошибок для удобного использования.
+// @author       Your Name
+// @match        *://*/*
+// @grant        GM_registerMenuCommand
+// @grant        GM_setClipboard
 // @grant        GM_addStyle
-// @grant        GM.getValue
-// @grant        GM.setValue
+// @grant        GM_getValue
+// @grant        GM_setValue
 // ==/UserScript==
 
 (function () {
-    'use strict';
+  'use strict';
 
-const apiKeys = [
-    "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‍",
-    "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‍",
-    "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",
-    "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‍",
-    "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",
-];
+  // --- Настройки API ---
+  const API_KEYS = [
+    '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',
+    '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',
+    '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',
+    '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',
+    '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',
+  ];
+  let currentApiIndex = 0;
 
-const getRandomApiKey = () => {
-    return apiKeys[Math.floor(Math.random() * apiKeys.length)];
-};
-    const apiUrl = "https://api.openai.com/v1/chat/completions";
+  const DEFAULT_TARGET_LANGUAGE = 'ru'; // Язык перевода по умолчанию
+  const TRANSLATION_HISTORY_KEY = 'translation_history';
 
-    let sourceLang = "Английский";
-    let targetLang = "Русский";
+  // --- Создание UI ---
+  const translatorHtml = `
+  <div id="translator-panel">
+    <h3>GPT Translator</h3>
+    <textarea id="input-text" placeholder="Введите текст для перевода"></textarea>
+    <div class="controls">
+      <select id="target-language">
+        <option value="ru">Русский</option>
+        <option value="en">Английский</option>
+        <option value="es">Испанский</option>
+        <option value="fr">Французский</option>
+      </select>
+      <button id="translate-button">Перевести</button>
+    </div>
+    <button id="clear-input">Очистить</button>
+    <div id="result-section">
+      <textarea id="translated-text" readonly placeholder="Перевод появится здесь"></textarea>
+      <button id="copy-translation">Скопировать перевод</button>
+    </div>
+    <div id="history-section">
+      <h3>История переводов</h3>
+      <ul id="translation-history"></ul>
+      <button id="clear-history">Очистить историю</button>
+    </div>
+    <div id="error-message" style="display: none;"></div>
+  </div>
+  `;
 
-    // Список языков для переключения
-    const languages = [
-        "Английский", "Русский", "Французский", "Немецкий", "Испанский", "Итальянский", "Азербайджанский", "Китайский"
-    ];
+  GM_addStyle(`
+  #translator-panel {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 380px;
+    background: #ffffff;
+    border: 1px solid #ddd;
+    padding: 15px;
+    z-index: 10000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    font-family: 'Arial', sans-serif;
+    transition: all 0.3s ease;
+  }
+  #translator-panel h3 {
+    margin: 0 0 10px;
+    font-size: 18px;
+    color: #333;
+  }
+  #translator-panel textarea {
+    width: 400px;
+    height: 80px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    padding: 8px;
+    font-size: 14px;
+    resize: none;
+  }
+  #translator-panel select, #translator-panel button {
+    padding: 10px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  #translator-panel select {
+    width: calc(50% - 5px);
+    margin-right: 5px;
+  }
+  #translator-panel button {
+    background-color: #007bff;
+    color: #fff;
+    font-weight: bold;
+  }
+  #translator-panel button:hover {
+    background-color: #0056b3;
+  }
+  #result-section {
+    margin-top: 10px;
+  }
+  #translation-history {
+    list-style-type: none;
+    padding: 0;
+    max-height: 150px;
+    overflow-y: auto;
+  }
+  #translation-history li {
+    margin-bottom: 5px;
+    background: #f1f1f1;
+    padding: 5px;
+    border-radius: 3px;
+  }
+  #error-message {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #ffcccc;
+    color: #990000;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+  `);
 
-    // Создание окна переводчика
-    const createTranslatorUI = () => {
-        const translatorWindow = document.createElement('div');
-        translatorWindow.id = 'translator-window';
-        translatorWindow.innerHTML = `
-            <div id="translator-header">
-                <span>SC Translator</span>
-                <button id="translator-close">✖</button>
-            </div>
-            <textarea id="translator-input" placeholder="Введите текст для перевода"></textarea>
-            <div id="translator-languages">
-                <button id="source-lang">${sourceLang}</button>
-                <button id="swap-languages">⇄</button>
-                <button id="target-lang">${targetLang}</button>
-            </div>
-            <button id="translator-translate">Перевести</button>
-            <div id="translator-output"></div>
-            <div id="resize-handle"></div>
-        `;
-        document.body.appendChild(translatorWindow);
+  document.body.insertAdjacentHTML('beforeend', translatorHtml);
 
-        // Стили для окна
-        GM_addStyle(`
-            #translator-window {
-                position: fixed;
-                bottom: 20px;
-                right: 20px;
-                width: 350px;
-                background-color: #222;
-                color: #fff;
-                border: 1px solid #555;
-                border-radius: 8px;
-                z-index: 10000;
-                font-family: Arial, sans-serif;
-                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-                resize: both;
-                overflow: hidden;
-            }
-            #translator-header {
-                background-color: #444;
-                padding: 8px;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                border-bottom: 1px solid #555;
-                cursor: move;
-            }
-            #translator-header span {
-                font-size: 14px;
-                font-weight: bold;
-            }
-            #translator-header button {
-                background: none;
-                border: none;
-                color: #fff;
-                font-size: 14px;
-                cursor: pointer;
-            }
-            #translator-input, #translator-output {
-                width: 90%;
-                margin: 10px auto;
-                display: block;
-                padding: 10px;
-                font-size: 14px;
-                color: #000;
-                background: #fff;
-                border: 1px solid #ccc;
-                border-radius: 4px;
-                resize: none;
-            }
-            #translator-translate {
-                display: block;
-                margin: 10px auto;
-                padding: 8px 16px;
-                background: #FF9800; /* LiveChat оранжевый */
-                color: white;
-                border: none;
-                border-radius: 4px;
-                font-size: 14px;
-                cursor: pointer;
-            }
-            #translator-translate:hover {
-                background: #E67E22;
-            }
-            #translator-languages {
-                display: flex;
-                justify-content: space-around;
-                margin: 10px auto;
-                font-size: 14px;
-            }
-            #translator-languages button {
-                background-color: #444;
-                color: #fff;
-                border: 1px solid #555;
-                border-radius: 4px;
-                padding: 5px 10px;
-                cursor: pointer;
-            }
-            #translator-languages button:hover {
-                background-color: #555;
-            }
-            #resize-handle {
-                width: 15px;
-                height: 15px;
-                background: #555;
-                position: absolute;
-                bottom: 0;
-                right: 0;
-                cursor: se-resize;
-            }
-        `);
+  const panel = document.getElementById('translator-panel');
+  const inputText = document.getElementById('input-text');
+  const targetLanguage = document.getElementById('target-language');
+  const translateButton = document.getElementById('translate-button');
+  const clearInputButton = document.getElementById('clear-input');
+  const translatedText = document.getElementById('translated-text');
+  const copyTranslationButton = document.getElementById('copy-translation');
+  const translationHistoryList = document.getElementById('translation-history');
+  const clearHistoryButton = document.getElementById('clear-history');
+  const errorMessage = document.getElementById('error-message');
 
-        // Drag-and-drop функциональность
-        const header = translatorWindow.querySelector('#translator-header');
-        let isDragging = false, offsetX, offsetY;
+  // --- Утилиты ---
+  function getCurrentApiKey() {
+    const key = API_KEYS[currentApiIndex];
+    currentApiIndex = (currentApiIndex + 1) % API_KEYS.length;
+    return key;
+  }
 
-        header.addEventListener('mousedown', (e) => {
-            isDragging = true;
-            offsetX = e.offsetX;
-            offsetY = e.offsetY;
-        });
+  async function translateText(text, targetLang) {
+    const apiKey = getCurrentApiKey();
+    try {
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`,
+        },
+        body: JSON.stringify({
+          model: "gpt-4-turbo",
+          messages: [
+            { role: "system", content: "You are a helpful assistant and translator." },
+            { role: "user", content: `Translate the following text to ${targetLang}: ${text}` }
+          ],
+          max_tokens: 500,
+        }),
+      });
 
-        document.addEventListener('mousemove', (e) => {
-            if (isDragging) {
-                translatorWindow.style.left = `${e.pageX - offsetX}px`;
-                translatorWindow.style.top = `${e.pageY - offsetY}px`;
-            }
-        });
+      if (!response.ok) {
+        throw new Error(`Ошибка API: ${response.status} - ${response.statusText}`);
+      }
 
-        document.addEventListener('mouseup', () => {
-            isDragging = false;
-        });
+      const data = await response.json();
+      return data.choices[0].message.content.trim();
+    } catch (error) {
+      throw new Error(`Ошибка перевода: ${error.message}`);
+    }
+  }
 
-        // Закрытие окна
-        document.getElementById('translator-close').addEventListener('click', () => {
-            translatorWindow.style.display = 'none';
-        });
+  // --- История переводов ---
+  function updateTranslationHistory(text, translated) {
+    const history = GM_getValue(TRANSLATION_HISTORY_KEY, []);
+    history.unshift({ text, translated, date: new Date().toISOString() });
+    GM_setValue(TRANSLATION_HISTORY_KEY, history.slice(0, 5)); // Храним только последние 5 переводов
+    renderTranslationHistory();
+  }
 
-        // Увеличение окна
-        const resizeHandle = document.getElementById('resize-handle');
-        resizeHandle.addEventListener('mousedown', (e) => {
-            e.preventDefault();
-            window.addEventListener('mousemove', resize);
-            window.addEventListener('mouseup', stopResize);
-        });
-
-        function resize(e) {
-            translatorWindow.style.width = `${e.clientX - translatorWindow.offsetLeft}px`;
-            translatorWindow.style.height = `${e.clientY - translatorWindow.offsetTop}px`;
-        }
-
-        function stopResize() {
-            window.removeEventListener('mousemove', resize);
-            window.removeEventListener('mouseup', stopResize);
-        }
-
-        return translatorWindow;
-    };
-
-    const translatorWindow = createTranslatorUI();
-
-    // Горячие клавиши Alt+C и Alt+X
-    document.addEventListener('keydown', (e) => {
-        if (e.altKey && e.key === 'c') {
-            translatorWindow.style.display = 'block';
-        } else if (e.altKey && e.key === 'x') {
-            translatorWindow.style.display = 'none';
-        }
+  function renderTranslationHistory() {
+    const history = GM_getValue(TRANSLATION_HISTORY_KEY, []);
+    translationHistoryList.innerHTML = '';
+    history.forEach((entry) => {
+      const li = document.createElement('li');
+      li.textContent = `${entry.text} → ${entry.translated} (${new Date(entry.date).toLocaleString()})`;
+      translationHistoryList.appendChild(li);
     });
+  }
 
-    // Обработчик кнопки перевода
-    document.getElementById('translator-translate').addEventListener('click', async () => {
-        const inputText = document.getElementById('translator-input').value.trim();
-        if (!inputText) {
-            alert('Введите текст для перевода!');
-            return;
-        }
+  function clearHistory() {
+    GM_setValue(TRANSLATION_HISTORY_KEY, []);
+    renderTranslationHistory();
+  }
 
-        // Отправка текста в GPT
-        const payload = {
-            model: "gpt-4-turbo",
-            messages: [
-                {
-                    role: "system",
-                    content: `You are a professional translator. Translate this text from ${sourceLang} to ${targetLang}.`
-                },
-                {
-                    role: "user",
-                    content: inputText
-                }
-            ],
-            max_tokens: 1000
-        };
+  // --- Обработчики событий ---
+  translateButton.addEventListener('click', async () => {
+    const text = inputText.value.trim();
+    const targetLang = targetLanguage.value;
+    if (text) {
+      try {
+        errorMessage.style.display = 'none'; // Скрыть ошибку
+        translatedText.value = 'Перевод...';
+        const translated = await translateText(text, targetLang);
+        translatedText.value = translated;
+        updateTranslationHistory(text, translated);
+      } catch (error) {
+        errorMessage.textContent = error.message;
+        errorMessage.style.display = 'block';
+        translatedText.value = '';
+      }
+    }
+  });
 
-        GM.xmlHttpRequest({
-            method: "POST",
-            url: apiUrl,
-            headers: {
-                "Authorization": `Bearer ${getRandomApiKey()}`,
-                "Content-Type": "application/json"
-            },
-            data: JSON.stringify(payload),
-            onload: (response) => {
-                try {
-                    const responseData = JSON.parse(response.responseText);
-                    const translatedText = responseData.choices[0].message.content.trim();
-                    document.getElementById('translator-output').textContent = translatedText;
-                } catch (err) {
-                    console.error("Ошибка обработки ответа:", err);
-                    document.getElementById('translator-output').textContent = "Ошибка перевода.";
-                }
-            },
-            onerror: (err) => {
-                console.error("Ошибка запроса:", err);
-                document.getElementById('translator-output').textContent = "Ошибка соединения.";
-            }
-        });
-    });
+  clearInputButton.addEventListener('click', () => {
+    inputText.value = '';
+    translatedText.value = '';
+    errorMessage.style.display = 'none';
+  });
 
-    // Переключение языков
-    const updateLanguageButtons = () => {
-        document.getElementById('source-lang').textContent = sourceLang;
-        document.getElementById('target-lang').textContent = targetLang;
-    };
+  copyTranslationButton.addEventListener('click', () => {
+    GM_setClipboard(translatedText.value);
+  });
 
-    document.getElementById('swap-languages').addEventListener('click', () => {
-        [sourceLang, targetLang] = [targetLang, sourceLang];
-        updateLanguageButtons();
-    });
+  clearHistoryButton.addEventListener('click', clearHistory);
 
-    document.getElementById('source-lang').addEventListener('click', () => {
-        const nextIndex = (languages.indexOf(sourceLang) + 1) % languages.length;
-        sourceLang = languages[nextIndex];
-        updateLanguageButtons();
-    });
-
-    document.getElementById('target-lang').addEventListener('click', () => {
-        const nextIndex = (languages.indexOf(targetLang) + 1) % languages.length;
-        targetLang = languages[nextIndex];
-        updateLanguageButtons();
-    });
+  renderTranslationHistory();
 })();
