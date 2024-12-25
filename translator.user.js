@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         GPT Translator with Drag and Dropыы
+// @name         Translator
 // @namespace    https://your-namespace.example/
 // @version      1.6
 // @description  Перевод текста с GPT API, улучшенное UI, обработка ошибок и возможность перетаскивания.
