@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         Enhanced LiveChat Linker (Fixed Clickability)
+// @name         Enhanced LiveChat Linker 
 // @version      2.0.2
 // @description  Enhancements for LiveChat interface with working email links
-// @author       Cavo + Fix by ChatGPT
+// @author       Cavo
 // @match        https://my.livechatinc.com/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=livechatinc.com
 // @grant        GM.getValue
