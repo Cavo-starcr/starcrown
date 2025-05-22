@@ -76,7 +76,7 @@
             projectGroupSelector = '.css-1s5f4dg';
         } else if (window.location.href.includes('archives')) {
             chatEmailSelector = '.css-cinmy0';
-            projectGroupSelector = '.css-1xt3h1w';
+            projectGroupSelector = '.css-1hj22cr';
         }
         const chatEmailElem = $(chatEmailSelector);
         const projectNameElem = $(projectGroupSelector);
