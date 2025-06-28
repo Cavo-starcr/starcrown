@@ -1,0 +1,553 @@
+/* Basic CSS for azonain.html */
+
+/* Importing Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Open+Sans:wght@400;600&display=swap');
+
+html {
+    scroll-behavior: smooth; /* Включаем плавную прокрутку */
+}
+
+body {
+    font-family: 'Open Sans', sans-serif; /* Default body font */
+    line-height: 1.6; /* As requested */
+    margin: 0;
+    padding: 0;
+    background-color: #FFFFFF; /* Чистый Белый */
+    color: #343A40; /* Темно-Серый / Графитовый */
+    padding-top: 70px; /* Add padding to body to offset fixed header, adjust as needed */
+}
+
+/* Header and Navigation Styles */
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(10, 35, 66, 0.95); /* Темно-синий с прозрачностью */
+    padding: 15px 0; /* Adjusted padding */
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: background-color 0.3s ease, padding 0.3s ease; /* Плавный переход для изменений */
+}
+
+.header.scrolled {
+    background-color: rgba(10, 35, 66, 1); /* Полностью непрозрачный */
+    padding: 10px 0; /* Уменьшенный паддинг */
+}
+
+.header-container {
+    width: 80%;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700; /* Bold */
+    font-size: 1.8em;
+    color: #FFFFFF;
+}
+
+.header nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+
+.header nav ul li {
+    margin-left: 25px; /* Adjusted margin */
+}
+
+.header nav ul li a {
+    color: #FFFFFF;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600; /* SemiBold */
+    text-decoration: none;
+    transition: color 0.3s ease;
+    font-size: 0.9em; /* Adjusted font size */
+}
+
+.header nav ul li a:hover {
+    color: #00A8CC; /* Бирюзовый при наведении */
+    text-decoration: underline; /* Добавлено подчеркивание для лучшей обратной связи */
+}
+/* End of Header and Navigation Styles */
+
+/* Button hover effects */
+button, .cta-button {
+    /* ... existing styles ... */
+    transition: all 0.2s ease-out; /* Smooth transition for all properties */
+    border: 2px solid transparent; /* Base border for hover/active states */
+}
+
+button:hover, .cta-button:hover {
+    opacity: 1; /* Keep opacity full, rely on other effects */
+    transform: translateY(-3px) scale(1.02); /* Slightly more lift and scale */
+    box-shadow: 0 6px 16px rgba(0, 168, 204, 0.3); /* Accent color shadow */
+    border-color: rgba(0, 168, 204, 0.5); /* Subtle accent border */
+}
+
+button:active, .cta-button:active {
+    transform: translateY(-1px) scale(0.98); /* Simulate press */
+    box-shadow: 0 2px 8px rgba(0, 168, 204, 0.25); /* Smaller shadow when pressed */
+    background-color: #008FAA; /* Slightly darker accent for pressed state */
+}
+
+/* Section Fade-in Animation */
+.section-fade-in {
+    opacity: 0;
+    transform: translateY(30px) scale(0.98); /* Start slightly lower and smaller */
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.section-fade-in.is-visible {
+    opacity: 1;
+    transform: translateY(0) scale(1); /* End at normal position and size */
+}
+/* End of Section Fade-in Animation */
+
+/* Hero/Banner Area Style */
+.hero-banner {
+    background: linear-gradient(-45deg, #0A2342, #005A8D, #007B9E, #00A8CC);
+    background-size: 400% 400%;
+    animation: gradientBG 25s ease infinite;
+    color: #FFFFFF;
+    padding: 40px 20px; /* Increased padding */
+    text-align: center;
+    margin-bottom: 30px; /* Space below hero banner */
+    border-radius: 0 0 15px 15px; /* Rounded bottom corners */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.hero-banner h1 {
+    font-size: 2.8em; /* Larger for hero */
+    color: #FFFFFF;
+    margin-bottom: 0.3em;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+}
+
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+/* End of Hero/Banner Area Style */
+
+/* Card styles with Glassmorphism effect */
+.card {
+    background: rgba(255, 255, 255, 0.6); /* Semi-transparent white */
+    -webkit-backdrop-filter: blur(10px); /* Backdrop filter for Safari */
+    backdrop-filter: blur(10px); /* Frosted glass effect */
+    padding: 25px; /* Slightly increased padding */
+    margin-bottom: 25px; /* Slightly increased margin */
+    border-radius: 15px; /* More rounded corners */
+    border: 1px solid rgba(255, 255, 255, 0.2); /* Subtle border */
+    box-shadow: 0 8px 32px 0 rgba(10, 35, 66, 0.15); /* Softer, more diffused shadow from primary color */
+    transition: transform 0.35s ease, box-shadow 0.35s ease, background-color 0.35s ease;
+}
+
+.card:hover {
+    transform: translateY(-8px) scale(1.01); /* More pronounced lift and slight scale */
+    box-shadow: 0 12px 40px rgba(10, 35, 66, 0.2);
+    background: rgba(255, 255, 255, 0.7); /* Slightly more opaque on hover */
+}
+/* End of Card Styles */
+
+/* Collapsible Section Styles */
+.collapsible-section .card { /* Apply to the card within collapsible for highlighting */
+    transition: box-shadow 0.3s ease-out, background-color 0.3s ease-out;
+}
+
+.collapsible-section.expanded .card {
+    box-shadow: 0 5px 15px rgba(0, 168, 204, 0.2); /* Accent color shadow when expanded */
+    background-color: #F0F8FF; /* AliceBlue - very light blue highlight */
+}
+
+.collapsible-section h4 {
+    transition: color 0.3s ease-out;
+}
+.collapsible-section.expanded h4 {
+    color: #007B9E; /* Slightly more prominent color for header when expanded */
+}
+
+
+.collapsible-content {
+    max-height: 150px; /* Adjust as needed for preview height */
+    overflow: hidden;
+    transition: max-height 0.7s ease-out, padding 0.5s ease-out; /* Smoother and longer transition */
+    position: relative;
+    /* background-color: #F8F9FA; Ensure it has a background if it's on a different bg */
+}
+
+.collapsible-content::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 50px;
+    background: linear-gradient(to bottom, rgba(248,249,250,0), #F8F9FA 90%); /* Assuming .container has #F8F9FA bg */
+    pointer-events: none;
+    transition: opacity 0.3s ease-out;
+}
+
+.collapsible-content.expanded {
+    max-height: 3000px; /* Adjust to a sufficiently large value to show all content */
+    padding-bottom: 20px; /* Add some padding when expanded */
+}
+
+.collapsible-content.expanded::after {
+    opacity: 0; /* Fade out the gradient */
+}
+
+.toggle-button {
+    background: none;
+    border: 1px solid transparent; /* Prepare for border on hover/focus */
+    color: #00A8CC; /* Яркий Бирюзовый */
+    cursor: pointer;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 600; /* SemiBold */
+    margin-top: 15px; /* Increased margin */
+    padding: 10px 15px; /* Increased padding for better clickability */
+    text-decoration: none;
+    display: block;
+    border-radius: 5px; /* Rounded corners for button */
+    transition: all 0.3s ease;
+    /* text-align: center; */
+}
+
+.toggle-button:hover {
+    text-decoration: none;
+    background-color: rgba(0, 168, 204, 0.1); /* Light accent background */
+    color: #007B9E; /* Darker accent on hover */
+    border-color: #00A8CC;
+}
+
+.toggle-button:focus { /* Accessibility improvement */
+    outline: none;
+    border-color: #00A8CC;
+    box-shadow: 0 0 0 2px rgba(0, 168, 204, 0.3);
+}
+/* End of Collapsible Section Styles */
+
+/* Icon Styles */
+.icon {
+    display: inline-block;
+    margin-right: 10px;
+    vertical-align: middle;
+    color: #00A8CC; /* Акцентный цвет */
+    font-size: 1.3em; /* Slightly larger icon */
+    line-height: 1;
+    transition: transform 0.3s ease-out, color 0.3s ease-out;
+    text-shadow: 1px 1px 2px rgba(10, 35, 66, 0.2); /* Subtle shadow for depth */
+}
+
+.icon:hover {
+    transform: scale(1.2); /* Scale up on hover */
+    color: #007B9E; /* Darker accent on hover */
+}
+
+.icon.dark-blue {
+    color: #0A2342;
+}
+.icon.dark-blue:hover {
+    color: #005A8D;
+}
+
+/* Example for animated list items if icons are part of them */
+ul li {
+    transition: background-color 0.3s ease; /* If you want list items to have hover effect */
+}
+/* ul li:hover .icon { /* Example: Animate icon when list item is hovered */
+    transform: rotate(15deg) scale(1.1);
+} */
+/* End of Icon Styles */
+
+/* Responsive Design */
+/* Mobile Menu Overlay */
+.mobile-menu-overlay {
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+    z-index: 999; /* Below header but above content */
+    opacity: 0;
+    transition: opacity 0.3s ease-out;
+}
+
+.mobile-menu-overlay.active {
+    display: block;
+    opacity: 1;
+}
+
+/* Staggered Animation for Nav Links */
+@keyframes navLinkFade {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.header nav ul li {
+    opacity: 0; /* Start hidden for animation */
+}
+
+.header nav ul.active li {
+    /* Animation will be applied by JS */
+}
+
+
+@media (max-width: 1024px) { /* Adjustments for smaller desktops/larger tablets */
+    .header-container, .container {
+        width: 90%;
+    }
+    .header nav ul li {
+        margin-left: 15px;
+        opacity: 1; /* Ensure desktop links are visible */
+    }
+    .header nav ul li a {
+        font-size: 0.85em;
+    }
+}
+
+@media (max-width: 768px) { /* Для планшетов и меньше */
+    body.menu-open { /* Prevent body scroll when mobile menu is open */
+        overflow: hidden;
+    }
+    body {
+        padding-top: 60px; /* Adjust if header height changes */
+    }
+    .header-container, .container {
+        width: 95%;
+    }
+    h1 { font-size: 2em; } /* Adjusted from 1.8em for better impact */
+    h2 { font-size: 1.6em; } /* Adjusted from 1.5em */
+    h3 { font-size: 1.3em; } /* Adjusted from 1.2em */
+    h4 { font-size: 1.1em; }
+
+    .header {
+        padding: 10px 0;
+    }
+    .header.scrolled {
+        padding: 8px 0;
+    }
+    .header nav ul {
+        flex-direction: column;
+        align-items: center; /* Center items for better appearance */
+        position: fixed; /* Changed from absolute to fixed for full screen behavior */
+        top: 0; /* Start from the top of the viewport */
+        left: -100%; /* Start off-screen to the left */
+        width: 70%; /* Adjust width as desired */
+        max-width: 300px; /* Max width for the menu */
+        height: 100vh; /* Full viewport height */
+        background-color: #0A2342;
+        padding-top: 60px; /* Space for close button or header */
+        box-shadow: 2px 0 5px rgba(0,0,0,0.2);
+        transition: left 0.4s ease-out; /* Smooth slide-in animation */
+        z-index: 1001; /* Above overlay */
+        overflow-y: auto; /* Allow scrolling if menu items are many */
+    }
+    .header nav ul.active { /* Class to show the menu */
+        left: 0; /* Slide in from the left */
+    }
+    .header nav ul li {
+        margin-left: 0;
+        opacity: 0; /* Hidden by default for staggered animation */
+        margin-bottom: 0; /* Remove bottom margin for tighter list */
+        width: 100%;
+        text-align: left; /* Align text to left for standard menu look */
+    }
+    .header nav ul.active li {
+        /* Animation applied by JS */
+    }
+    .header nav ul li a {
+        display: block;
+        padding: 15px 25px; /* Adjusted padding */
+        font-size: 1em;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Separator */
+    }
+    .header nav ul li:last-child a {
+        border-bottom: none;
+    }
+    .header nav ul li a:hover {
+        background-color: #00A8CC;
+        color: #FFFFFF;
+    }
+    .menu-toggle { /* Hamburger icon styling */
+        display: block;
+        color: #FFFFFF;
+        font-size: 1.8em; /* Made hamburger slightly larger */
+        cursor: pointer;
+        padding: 5px; /* Add some padding to make it easier to click */
+        z-index: 1002; /* Ensure it's above the slide-in menu if it overlaps */
+    }
+    .logo {
+        font-size: 1.5em;
+    }
+}
+
+@media (max-width: 480px) { /* Для телефонов */
+    body {
+        padding-top: 55px; /* Adjust if header height changes */
+    }
+    .hero-banner h1 { font-size: 1.8em; }
+    h1 { font-size: 1.6em; } /* Adjusted from 1.5em */
+    h2 { font-size: 1.3em; }
+    h3 { font-size: 1.1em; }
+    h4 { font-size: 0.95em; }
+
+    .collapsible-content {
+        max-height: 120px; /* Slightly smaller preview for very small screens */
+    }
+    .collapsible-content::after {
+        height: 40px;
+    }
+    .logo {
+        font-size: 1.3em;
+    }
+    .header nav ul {
+        padding-top: 55px; /* Adjust based on header height */
+    }
+    .header nav ul li a {
+        padding: 12px 20px; /* Adjust padding for smaller screens */
+        font-size: 0.95em;
+    }
+    .menu-toggle {
+        font-size: 1.6em;
+    }
+}
+/* End of Responsive Design */
+
+.container {
+    width: 80%;
+    margin: auto;
+    overflow: hidden;
+    padding: 20px;
+    background-color: #F8F9FA; /* Очень Светло-Серый for content blocks */
+    box-shadow: 0 0 10px rgba(0,0,0,0.1); /* Subtle shadow */
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Montserrat', sans-serif;
+    color: #0A2342; /* Глубокий Синий */
+    margin-bottom: 0.5em; /* Default margin, can be adjusted */
+}
+
+h1 {
+    font-size: 2.5em; /* Can be adjusted */
+    font-weight: 800; /* ExtraBold for H1 */
+}
+
+h2 {
+    font-size: 2em; /* Can be adjusted */
+    font-weight: 700; /* Bold for H2 */
+}
+
+h3 {
+    font-size: 1.5em; /* Can be adjusted */
+    font-weight: 600; /* SemiBold for H3 */
+}
+
+h4 {
+    font-size: 1.2em; /* Can be adjusted */
+    font-weight: 500; /* Medium for H4 - assuming this based on H3 */
+}
+
+/* Paragraphs and Lists */
+p {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400; /* Regular */
+    margin-bottom: 1em;
+    line-height: 1.6; /* Ensuring line-height for paragraphs as well */
+}
+
+ul, ol {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400; /* Regular */
+    padding-left: 20px;
+    margin-bottom: 1em;
+}
+
+li {
+    margin-bottom: 0.5em;
+}
+
+strong {
+    font-weight: 600; /* SemiBold for strong text */
+}
+
+/* Links and Buttons (basic styling, can be expanded) */
+a {
+    color: #00A8CC; /* Яркий Бирюзовый for links */
+    text-decoration: none; /* Optional: remove underline */
+}
+
+a:hover {
+    text-decoration: underline; /* Optional: add underline on hover */
+}
+
+button, .cta-button { /* Example class for Call To Action buttons */
+    background-color: #00A8CC; /* Яркий Бирюзовый */
+    color: #FFFFFF;
+    border: none;
+    padding: 10px 20px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600; /* SemiBold or Bold for buttons */
+    cursor: pointer;
+    border-radius: 5px; /* Optional: rounded corners */
+}
+
+button:hover, .cta-button:hover {
+    opacity: 0.9; /* Slight fade on hover */
+}
+
+/* Footer and Navigation (Placeholder - to be implemented in HTML first) */
+/*
+.footer {
+    background-color: #0A2342;
+    color: #FFFFFF;
+    padding: 20px;
+    text-align: center;
+}
+
+.navigation {
+    background-color: #0A2342;
+    padding: 10px 0;
+}
+
+.navigation ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+}
+
+.navigation ul li {
+    display: inline;
+    margin-right: 20px;
+}
+
+.navigation ul li a {
+    color: #FFFFFF;
+    font-family: 'Montserrat', sans-serif;
+}
+*/
+
+/* Utility class for secondary background sections if needed */
+.content-section-secondary-bg {
+    background-color: #F8F9FA; /* Очень Светло-Серый */
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 5px; /* Optional */
+}
